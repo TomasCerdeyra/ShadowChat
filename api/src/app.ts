@@ -14,11 +14,11 @@ app.use(cors());
 
 connectMongodb();
 
+app.use('/', userRoute)
+
 app.get('*', (req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });
 })
-
-app.use('/', userRoute)
 
 
 const PORT = process.env.PORT || 8080;
