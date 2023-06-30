@@ -1,7 +1,11 @@
+
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import connectMongodb from "./config/connectMongo.config";
+
+import userRoute from './routes/user.routes'
+
 
 const app = express();
 
@@ -14,6 +18,9 @@ connectMongodb();
 app.get('*', (req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });
 })
+
+app.use('/', userRoute)
+
 
 const PORT = process.env.PORT || 8080;
 
