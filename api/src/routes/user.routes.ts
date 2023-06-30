@@ -4,6 +4,8 @@ const router = Router()
 
 router.get('/:name')
 
-router.post('/')
+router.post('/login')
+
+router.post('/register')
 
 export default router
