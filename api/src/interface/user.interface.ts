@@ -1,8 +1,7 @@
-interface user {
+interface User {
     name: string,
     email: string,
-    messages: [],
     password: string
 }
 
-export default user
+export default User
