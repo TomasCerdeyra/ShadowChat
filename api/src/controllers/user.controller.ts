@@ -13,8 +13,29 @@ const postItem = async (req: Request, res: Response) => {
     } catch (error: any) {
         console.log(error);
         
-        res.status(500).json({ error: error._message });
+        res.status(500).json({ error: error._message, status: 500 });
     }
 }
 
-export { postItem };
+const login = async (req: Request, res: Response) => {
+    try {
+        const loginUser = await users.makeLogin(req.body);
+        if (loginUser === "USER_NOT_FOUND") return res.status(404).json({ message: 'User not found', status: 404 })
+        if (loginUser === "PASSWORD_INCORRECT") return res.status(400).json({ message: "Incorrect password", status: 400 });
+        return res.json({ message: "Logged in", response: loginUser });
+    } catch (error: any) {        
+        res.status(500).json({ error: error._message, status: 500 })
+    }
+}
+
+const getItem = async (req: Request, res: Response) => {
+    try {
+        const getUniqueItem = await users.getUserByEmail(req.params.email);
+        if (getUniqueItem === "USER_NOT_FOUND") return res.status(404).json({ message: "User not found", status: 404 });
+        return res.json({ user: getUniqueItem });
+    } catch (error: any) {
+        res.status(500).json({ error: error._message, status: 500 });
+    }
+}
+
+export { postItem, login, getItem };

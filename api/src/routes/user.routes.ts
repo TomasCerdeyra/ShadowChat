@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { postItem } from "../controllers/user.controller";
+import { getItem, login, postItem } from "../controllers/user.controller";
+import checkAuth from "../middlewares/checkAuth";
 
 const router = Router()
 
-router.get('/:name')
+router.get('/user/:email', checkAuth, getItem);
 
-router.post('/login')
+router.post('/login', login);
 
 router.post('/register', postItem);
 

@@ -19,6 +19,10 @@ const schema = new mongoose.Schema<User>(
       required: true,
       trim: true,
     },
+    session_active: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true,
