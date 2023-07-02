@@ -28,7 +28,9 @@ class Users {
         const response = {
             name,
             email,
-            password: await hashPassword(password)
+            password: await hashPassword(password),
+            chats: [],
+            groups: []
         }    
         const newUser = await this.collection.create(response);
         return newUser;

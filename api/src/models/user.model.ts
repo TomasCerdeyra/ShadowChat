@@ -1,6 +1,20 @@
 import mongoose from "mongoose";
 import User from "../interface/user.interface";
 
+const chatsSchema = new mongoose.Schema({
+  chats: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "chats"
+  }
+});
+
+const groupsSchema = new mongoose.Schema({
+  groups: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Groups"
+  }
+})
+
 const schema = new mongoose.Schema<User>(
   {
     name: {
@@ -19,6 +33,8 @@ const schema = new mongoose.Schema<User>(
       required: true,
       trim: true,
     },
+    chats: [chatsSchema],
+    groups: [groupsSchema],
     session_active: {
       type: Boolean,
       default: false
