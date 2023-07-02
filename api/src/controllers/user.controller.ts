@@ -10,9 +10,7 @@ const postItem = async (req: Request, res: Response) => {
             email: postUser.email,
         }
         res.status(201).json({ message: 'User created', newUser: finalResponse, status: 201 });
-    } catch (error: any) {
-        console.log(error);
-        
+    } catch (error: any) {        
         res.status(500).json({ error: error._message, status: 500 });
     }
 }

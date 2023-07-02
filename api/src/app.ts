@@ -1,10 +1,10 @@
-
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import connectMongodb from "./config/connectMongo.config";
 import userRoute from './routes/user.routes'
 import routerChat from "./routes/chat.routes";
+import groupRoute from './routes/group.routes'
 
 const app = express();
 
@@ -20,6 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/', userRoute);
 app.use('/chat', routerChat);
+app.use('/groups', groupRoute)
 
 app.get('*', (req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });
