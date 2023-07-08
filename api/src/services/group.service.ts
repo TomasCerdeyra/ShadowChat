@@ -3,6 +3,7 @@ import group from "../interface/group.interface";
 import groupModel from "../models/group.model";
 import User from "../interface/user.interface";
 import userModel from "../models/user.model";
+import { ObjectId } from "mongodb";
 
 class Group {
     collection: Model<group>
@@ -24,27 +25,51 @@ class Group {
         else return 'ERROR_TO_CREATE_GROUP'
     }
 
-    async getAddUserGroup(idGroup: string, email: string) {
-  const userInvited = await this.users.findOne({ email });
-  console.log(userInvited);
-  
+    async postAddUserGroup(idGroup: string, email: string) {
+        const userInvited = await this.users.findOne({ email });
 
-  const group = await this.collection.findOne({ _id: idGroup });
 
-  if (group) {
-    if (userInvited) {
+        const group = await this.collection.findOne({ _id: idGroup });
 
-      group.users?.push(`${userInvited._id}`)
-      group.save()
+        const userId = new ObjectId(userInvited?._id);
 
-      return 'USER_ADDED';
-    } else {
-      return 'USER_NOT_FOUND';
+        if (group?.users?.some(user => new ObjectId(user).equals(userId))) return 'USER_ALREADY_IN_GROUP'
+
+        if (group) {
+            if (userInvited) {
+                //!ARREGLAR MAÑANA ESTE PROBLEMA LOCO EEEE
+
+                //Verifico que el usuario a ingresar no este en el grupo
+                if (group?.users?.includes(`${userInvited._id}`)) return 'USER_ALREADY_IN_GROUP'
+
+                group.users?.push(`${userInvited._id}`)
+                group.save()
+
+                userInvited.groups?.push(`${group._id}`)
+                userInvited.save()
+
+                return 'USER_ADDED';
+            } else {
+                return 'USER_NOT_FOUND';
+            }
+        } else {
+            return 'GROUP_NOT_FOUND';
+        }
     }
-  } else {
-    return 'GROUP_NOT_FOUND';
-  }
-}
+
+    async postDeleteUser(idGroup: string, email: string) {
+        const userDelete = await this.users.findOne({ email });
+        const group = await this.collection.findOne({ _id: new ObjectId(idGroup) });
+
+        if (!userDelete) return 'USER_NOT_FOUND'
+
+        const users = await this.collection.updateMany(
+            { _id: new ObjectId(idGroup) },
+            { $pull: { users: { _id: new ObjectId(userDelete?._id) } } }
+        );
+
+        return 'USER_DELETED'
+    }
 
 }
 

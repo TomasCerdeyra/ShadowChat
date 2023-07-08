@@ -5,7 +5,7 @@ import group from "../interface/group.interface";
 const userSchema = new mongoose.Schema(
     {
         user: {
-           type: String,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Users"
         }
     }
