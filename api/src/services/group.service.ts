@@ -27,8 +27,6 @@ class Group {
 
     async postAddUserGroup(idGroup: string, email: string) {
         const userInvited = await this.users.findOne({ email });
-
-
         const group = await this.collection.findOne({ _id: idGroup });
 
         const userId = new ObjectId(userInvited?._id);
@@ -37,8 +35,6 @@ class Group {
 
         if (group) {
             if (userInvited) {
-                //!ARREGLAR MAÑANA ESTE PROBLEMA LOCO EEEE
-
                 //Verifico que el usuario a ingresar no este en el grupo
                 if (group?.users?.includes(`${userInvited._id}`)) return 'USER_ALREADY_IN_GROUP'
 
