@@ -18,6 +18,18 @@ class Chat {
         if (newChat) return "CHAT_CREATED";
         else return "ERROR_TO_CREATE_CHAT";
     }
+
+    async sendMessages(id: string, message: string) {
+        console.log(message);
+        
+        const findChat = await this.collection.findOne({ _id: id });
+        
+        if (!findChat) return "CHAT_NOT_FOUND"
+        
+        const sendMessage = await this.collection.updateOne({ _id: id}, { $push: { messages: message } }, { new: true })
+            
+        if (sendMessage.modifiedCount === 1) return "MESSAGE_SENDED"
+    }
 }
 
 const chat = new Chat();
