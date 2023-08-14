@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { getAddItem, getCreateItem, postDeleteItem } from "../controllers/grup.controller";
+import { getAddItem, getCreateItem, postDeleteItem, postItemChat,  } from "../controllers/grup.controller";
 import checkAuth from "../middlewares/checkAuth";
 
-const route = Router();
+const router = Router();
 
-route.get('/:mainUser', checkAuth, getCreateItem)
-route.post('/:idGroup', checkAuth, getAddItem)
+router.get('/:mainUser', checkAuth, getCreateItem)
+router.post('/:idGroup', checkAuth, getAddItem)
 
-route.post('/deleteUser/:idGroup', checkAuth, postDeleteItem)
+router.post('/deleteUser/:idGroup', checkAuth, postDeleteItem)
+
+router.post('/addMessge/:idGroup', checkAuth, postItemChat);
 
 
-export default route
+export default router

@@ -4,6 +4,7 @@ import groupModel from "../models/group.model";
 import User from "../interface/user.interface";
 import userModel from "../models/user.model";
 import { ObjectId } from "mongodb";
+import GroupMessage from "../interface/groupMenssage.intereface";
 
 class Group {
     collection: Model<group>
@@ -65,6 +66,24 @@ class Group {
         );
 
         return 'USER_DELETED'
+    }
+
+    async postAddMessge(idGroup: string, body: GroupMessage) {
+        const {userName, message} = body;
+        const group = await this.collection.findOne({ _id: new ObjectId(idGroup) });
+
+        if (!group) return 'GROUP_NOT_FOUND'
+
+        await this.collection.updateOne(
+            { _id: new ObjectId(idGroup) },
+            { $push: { messages: {
+                userName,
+                message
+            } } }
+        ); 
+
+
+        return 'MESSAGE_ADD'
     }
 
 }

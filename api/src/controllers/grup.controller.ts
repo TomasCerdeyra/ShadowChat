@@ -38,9 +38,24 @@ const postDeleteItem = async (req: Request, res: Response) => {
     try {
         const userDeleted = await groupService.postDeleteUser(idGroup, req.body.email)
 
-        if(userDeleted === 'USER_NOT_FOUND')return res.status(404).json({ message: 'User not found' })
+        if (userDeleted === 'USER_NOT_FOUND') return res.status(404).json({ message: 'User not found' })
         if (userDeleted === 'USER_DELETED') return res.json({ message: 'User Deleted' })
     } catch (error: any) {
+        return res.status(500).json({ error: error._mesagge })
+    }
+}
+
+const postItemChat = async (req: Request, res: Response) => {
+    const { idGroup } = req.params;
+    
+    try {
+        const addMessage = await groupService.postAddMessge(idGroup,  req.body)
+
+        if (addMessage === 'GROUP_NOT_FOUND') return res.status(404).json({ message: 'User not found' })
+        if (addMessage === 'MESSAGE_ADD') return res.json({ message: 'Messge Add' })
+    } catch (error: any) {
+        console.log(error);
+
         return res.status(500).json({ error: error._mesagge })
     }
 }
@@ -49,5 +64,6 @@ const postDeleteItem = async (req: Request, res: Response) => {
 export {
     getCreateItem,
     getAddItem,
-    postDeleteItem
+    postDeleteItem,
+    postItemChat
 }
